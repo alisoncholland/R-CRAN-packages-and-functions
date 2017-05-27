@@ -1,0 +1,104 @@
+# Copyright © 2017, Alison C. Holland, All rights reserved. 
+
+# Different bar plots of same data
+# --------------------------------
+
+# plot bar plot of all cohorts across weeks
+ggplot(sales_df_gath, aes(x = factor(week), y = sales, fill = cohort)) + 
+  geom_bar(stat="identity", position = "dodge") + 
+  labs(title = "Number of sales for each cohort", x = "weeks")
+
+# plot bar plot 3 cohorts as 3 bar plots on one page
+sales_df_gath$sales <- as.numeric(sales_df_gath$sales) # make continuous variable
+ggplot(sales_df_gath, aes(x = factor(week), y = sales, fill = cohort)) + 
+  geom_bar(stat = "identity") +
+  facet_grid(cohort ~ .) +
+  labs(title = "Number of sales for each separate cohort", x = "weeks", y = "sales") 
+  
+  
+# plot graphs for each cohort within each categorical variable by...
+# ------------------------------------------------------------------
+
+# plotting each graph separately...
+
+# cohort a
+cohort_a_var <- ggplot(cohort_a_users, aes(x = variable, y = users, fill = choice)) + 
+  geom_bar(stat="identity", position = "dodge") + 
+  labs(title = "Number of users for each variable in cohort a", x = "variables")
+
+# cohort b
+cohort_b_var <- ggplot(cohort_b_users, aes(x = variable, y = users, fill = choice)) + 
+  geom_bar(stat="identity", position = "dodge") + 
+  labs(title = "Number of users for each variable in cohort b", x = "variables")
+
+# cohort c
+cohort_c_var <- ggplot(cohort_c_users, aes(x = variable, y = users, fill = choice)) + 
+  geom_bar(stat="identity", position = "dodge") + 
+  labs(title = "Number of users for each variable in cohort c", x = "variables")
+
+# arrange plots
+require(gridExtra)
+grid.arrange(cohort_a_var, cohort_b_var, cohort_c_var, nrow = 3)
+
+
+# or plotting each graph with lapply
+
+# create list of dfs
+cohortUsers <- list(cohort_a_users, cohort_b_users, cohort_c_users)
+
+# plot all graphs with ggplot using lapply
+plotCohortVar <- lapply(cohortUsers, function(f) ggplot(f, aes(x = variable, y = users, fill = choice)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_grid(cohort ~ .) +
+  labs(x = "variables"))
+
+# output graphs
+plotCohortVar 
+
+# arrange plots
+require(gridExtra)
+grid.arrange(plotCohortVar[[1]], plotCohortVar[[2]], plotCohortVar[[3]], nrow = 3, top = "Number of users for each variable in each cohort")
+
+
+# compare differences for each categorical variable between cohorts
+# -----------------------------------------------------------------
+
+# plot bar plot for each variable
+
+# sum up weeks
+data_sum2 <- select(data2, starts_with("week"))
+data_sum2$total_sales <- rowSums(data_sum2)
+
+# merge data
+data_sum2$userid <- data1$userid
+data_sum <- merge(data1, data_sum2, by = "userid")
+
+# has_first_name
+firstName <- ggplot(data_sum, aes(x = has_first_name, y = total_sales, fill = cohort)) + 
+  geom_bar(stat="identity", position = "dodge") + 
+  labs(title = "Comparing number of sales for 'first name' variable", x = "first name", y = "total sales")
+
+# has_last_name
+lastName <- ggplot(data_sum, aes(x = has_last_name, y = total_sales, fill = cohort)) + 
+  geom_bar(stat="identity", position = "dodge") + 
+  labs(title = "Comparing number of sales for 'last name' variable", x = "last name", y = "total sales")
+
+# arrange plots
+require(gridExtra)
+grid.arrange(firstName, lastName, ncol = 2)
+
+# has_verified_email
+email <- ggplot(data_sum, aes(x = has_verfied_email, y = total_sales, fill = cohort)) + 
+  geom_bar(stat="identity", position = "dodge") + 
+  labs(title = "Comparing number of sales for 'verified email' variable", x = "verified email", y = "total sales")
+
+# has_phone
+phone <- ggplot(data_sum, aes(x = has_phone, y = total_sales, fill = cohort)) + 
+  geom_bar(stat="identity", position = "dodge") + 
+  labs(title = "Comparing number of sales for 'phone' variable", x = "phone", y = "total sales")
+
+# arrange plots
+require(gridExtra)
+grid.arrange(email, phone, ncol = 2)
+
+
