@@ -4,6 +4,7 @@
 # -----------------------------------------
 
 # summary function
+summary(data)
 summary(cohort_a)
 summary(cohort_b)
 summary(cohort_c)
