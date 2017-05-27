@@ -1,0 +1,20 @@
+# Copyright © 2017, Alison C. Holland, All rights reserved. 
+
+# filter cohorts into df using...
+# -------------------------------
+
+# filter function or...
+cohort_a <- filter(data, cohort == "a")
+cohort_b <- filter(data, cohort == "b")
+cohort_c <- filter(data, cohort == "c")
+
+# filter function with for loop
+for (i in unique(data$cohort)) {
+  cohort_group <- sprintf("cohort_%s", i)
+  assign(cohort_group, data[data$cohort == i,])
+}
+
+# write to .csv
+write.csv(cohort_a, "cohort_a.csv")
+write.csv(cohort_b, "cohort_b.csv")
+write.csv(cohort_c, "cohort_c.csv")
