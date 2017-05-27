@@ -1,0 +1,32 @@
+# Copyright © 2017, Alison C. Holland, All rights reserved.
+
+# Create box plot of all 3 cohorts
+# --------------------------------
+
+boxPlot_allCohorts <- boxplot(sales_df[,-1], main = "Box plot of sales across three cohorts", ylab = "sales", xlab = "cohort", col = c("salmon", "limegreen", "royalblue1")) 
+legend("topright", inset = .05, title = "cohort", c("a", "b", "c"), fill = c("salmon", "limegreen", "royalblue1"), horiz = TRUE)
+
+
+# Get overview of distribution for each cohort with box plot and histogram
+# ------------------------------------------------------------------------
+
+# cohort a
+par(mfrow = c(1,2))
+boxplot(sales_df$a, horizontal = TRUE, xlab = "sales", main = "Box plot of sales for cohort a", col = "salmon")
+hist(sales_df$a, main = "Histogram of sales for cohort a", xlab = "sales", prob = T)
+lines(density(sales_df$a),lty = "dashed",lwd = 2.5,col = "salmon")
+
+# cohort b
+par(mfrow = c(1,2))
+boxplot(sales_df$b, horizontal = TRUE, xlab = "sales", main = "Box plot of sales for cohort b", col = "limegreen")
+hist(sales_df$b, main = "Histogram of sales for cohort b", xlab = "sales", prob = T)
+lines(density(sales_df$b),lty = "dashed",lwd = 2.5,col = "limegreen")
+
+# cohort c
+par(mfrow = c(1,2))
+boxplot(sales_df$c, horizontal = TRUE, xlab = "sales", main = "Box plot of sales for cohort c", col = "royalblue1")
+hist(sales_df$c, main = "Histogram of sales for cohort c", xlab = "sales", prob = T)
+lines(density(sales_df$c),lty = "dashed",lwd = 2.5,col = "royalblue1")
+
+# alternative arrangement, e.g. 3 plots in a row
+par(mfrow = c(1,3))
