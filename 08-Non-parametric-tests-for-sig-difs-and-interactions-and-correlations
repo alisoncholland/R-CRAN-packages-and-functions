@@ -1,0 +1,99 @@
+# Copyright © 2017, Alison C. Holland, All rights reserved. 
+
+# Kruskal Wallis test (assuming that they're not normally distributed so not using independent ANOVA)...
+# ------------------------------------------------------------------------------------------------------
+
+# ...to compare dif between 3 cohorts 
+sales_df_gath$sales <- as.factor(sales_df_gath$sales)
+sales_df_gath$cohort <- as.factor(sales_df_gath$cohort)
+kruskal.test(sales ~ cohort, data = sales_df_gath)
+
+# ...to compare dif between weeks across cohorts
+kruskal.test(sales ~ week, data = sales_df_gath)
+
+
+# compare dif in sales by var for each cohort using kruskal.test
+# --------------------------------------------------------------
+
+# filter into cohorts using filter function with for loop
+for (i in unique(data_sum$cohort)) {
+  cohort_group_sum <- sprintf("cohort_%s_sum", i)
+  assign(cohort_group_sum, data_sum[data_sum$cohort == i,])
+}
+
+# ...for each cohort with each variable (just one example)
+
+# cohort a - first name
+#kruskal.test(total_sales ~ has_first_name, data = cohort_a_sum)
+
+# cohort b - first name
+#kruskal.test(total_sales ~ has_first_name, data = cohort_b_sum)
+
+# cohort c - first name
+#kruskal.test(total_sales ~ has_first_name, data = cohort_c_sum)
+
+
+# ...or using lapply taking all cohorts for each variable
+
+# cohorts a[[1]], b[[2]], c[[3]] for first name variable
+cohortSumList <- list(cohort_a_sum, cohort_b_sum, cohort_c_sum)
+cohortsHasFirstName <- lapply(cohortSumList, function(f) kruskal.test(total_sales ~ has_first_name, data = f))
+print(cohortsHasFirstName)
+
+# cohorts a[[1]], b[[2]], c[[3]] for last name variable
+cohortSumList <- list(cohort_a_sum, cohort_b_sum, cohort_c_sum)
+cohortsHasLastName <- lapply(cohortSumList, function(f) kruskal.test(total_sales ~ has_last_name, data = f))
+print(cohortsHasLastName)
+
+# cohorts a[[1]], b[[2]], c[[3]] for email variable
+cohortSumList <- list(cohort_a_sum, cohort_b_sum, cohort_c_sum)
+cohortsHasEmail <- lapply(cohortSumList, function(f) kruskal.test(total_sales ~ has_verfied_email, data = f))
+print(cohortsHasEmail)
+
+# cohorts a[[1]], b[[2]], c[[3]] for phone variable
+cohortSumList <- list(cohort_a_sum, cohort_b_sum, cohort_c_sum)
+cohortsHasPhone <- lapply(cohortSumList, function(f) kruskal.test(total_sales ~ has_phone, data = f))
+print(cohortsHasPhone)
+
+
+# looking at interactions (multiple regression) in each variable within each cohort
+# ---------------------------------------------------------------------------------
+
+# cohort a
+sales_reg_a <- lm(total_sales ~ has_first_name + has_last_name + has_verfied_email + 
+  has_phone + number_of_items_watched, cohort_a_sum)
+summary(sales_reg_a)
+
+# cohort b
+sales_reg_b <- lm(total_sales ~ has_first_name + has_last_name + has_verfied_email + 
+  has_phone + number_of_items_watched, cohort_b_sum)
+summary(sales_reg_b)
+
+# cohort c
+sales_reg_c <- lm(total_sales ~ has_first_name + has_last_name + has_verfied_email + 
+  has_phone + number_of_items_watched, cohort_c_sum)
+summary(sales_reg_c)
+
+
+# looking at correlations in items watched within each cohort
+# -----------------------------------------------------------
+
+# correlation between cohort a sales and number of items watched (non-parametric, therefore spearman)
+corr_cohort_a <- select(cohort_a_sum, total_sales, number_of_items_watched)
+rcorr(as.matrix(corr_cohort_a))
+cor(corr_cohort_a, method = "spearman")
+sum(corr_cohort_a$total_sales)
+
+# correlation between cohort b sales and number of items watched (non-parametric, therefore spearman)
+corr_cohort_b <- select(cohort_b_sum, total_sales, number_of_items_watched)
+rcorr(as.matrix(corr_cohort_b))
+cor(corr_cohort_b, method = "spearman")
+sum(corr_cohort_b$total_sales)
+
+# correlation between cohort c sales and number of items watched (non-parametric, therefore spearman)
+corr_cohort_c <- select(cohort_c_sum, total_sales, number_of_items_watched)
+rcorr(as.matrix(corr_cohort_c))
+cor(corr_cohort_c, method = "spearman")
+sum(corr_cohort_c$total_sales)
+
+
