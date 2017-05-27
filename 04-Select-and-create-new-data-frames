@@ -1,0 +1,22 @@
+# Copyright © 2017, Alison C. Holland, All rights reserved. 
+
+# selecting week columns for each cohort and creating new dfs using...
+# --------------------------------------------------------------------
+
+# select function...
+#cohort_a_sales <- select(cohort_a, starts_with("week"))
+#cohort_b_sales <- select(cohort_b, starts_with("week"))
+#cohort_c_sales <- select(cohort_c, starts_with("week"))
+
+# or select function with lapply
+df_list <- list(cohort_a, cohort_b, cohort_c) # create list of dfs
+weekColumns <- lapply(df_list, function(f) select(f, starts_with("week"))) # creates dfs with only weeks in each cohort
+
+names(weekColumns) <- c("cohort_a_sales", "cohort_b_sales", "cohort_c_sales") # create df names
+list2env(weekColumns, envir = .GlobalEnv) # convert lists to dfs
+
+# create data frame of all cohorts
+sales_df <- data.frame(week = 1:15, a = colSums(cohort_a_sales), b = colSums(cohort_b_sales), c = colSums(cohort_c_sales))
+
+# gather
+sales_df_gath <- gather(sales_df, cohort, sales, a:c)
