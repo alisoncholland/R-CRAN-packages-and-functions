@@ -1,0 +1,14 @@
+# Copyright © 2017, Alison C. Holland, All rights reserved. 
+
+# descriptive stats for each cohort with... 
+# -----------------------------------------
+
+# summary function
+summary(cohort_a)
+summary(cohort_b)
+summary(cohort_c)
+
+# or with lapply
+cohortList <- list(cohort_a, cohort_b, cohort_c)
+DScohorts <- lapply(cohortList, function(f) summary(f))
+print(DScohorts)
