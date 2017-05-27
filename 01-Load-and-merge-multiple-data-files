@@ -10,6 +10,3 @@ data2 <- read.csv("C:/Users/wease/Desktop/Ali/AliCV/RGchallenge/ChallengeData2.c
 
 # merge data
 data <- merge(data1, data2, by = "userid")
-
-# descriptive stats
-summary(data)
