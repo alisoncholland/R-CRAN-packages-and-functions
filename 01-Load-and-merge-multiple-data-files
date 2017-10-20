@@ -5,8 +5,8 @@ setwd("C:/Users/wease/Desktop/Ali/AliCV/RGchallenge")
 getwd()
 
 # load data
-data1 <- read.csv("C:/Users/wease/Desktop/Ali/AliCV/RGchallenge/ChallengeData1.csv", header = TRUE)
-data2 <- read.csv("C:/Users/wease/Desktop/Ali/AliCV/RGchallenge/ChallengeData2.csv", header = TRUE)
+data1 <- read.csv("C:/Users/user/Desktop/ChallengeData1.csv", header = TRUE)
+data2 <- read.csv("C:/Users/user/Desktop/ChallengeData2.csv", header = TRUE)
 
 # merge data
 data <- merge(data1, data2, by = "userid")
