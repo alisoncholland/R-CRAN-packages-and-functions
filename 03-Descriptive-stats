@@ -13,3 +13,46 @@ summary(cohort_c)
 cohortList <- list(cohort_a, cohort_b, cohort_c)
 DScohorts <- lapply(cohortList, function(f) summary(f))
 print(DScohorts)
+
+
+# Exploring assumptions 
+# ---------------------
+
+# load file
+dlf <- read.delim("DownloadFestival.txt", header = TRUE)
+dlf
+
+# quantify normality - p. 173
+describe(dlf$day1) # OR
+stat.desc(dlf$day1, basic = FALSE, norm = TRUE)
+stat.desc(dlf$day1, basic = TRUE, norm = FALSE)
+
+# quantify normality for multiple variables
+describe(cbind(dlf$day1, dlf$day2, dlf$day3)) # OR
+stat.desc(dlf[, c("day1", "day2", "day3")], basic = FALSE, norm = TRUE)
+
+# change decimal places
+round(describe(cbind(dlf$day1, dlf$day2, dlf$day3)), digits = 3)
+
+
+# Transforming data
+# -----------------
+
+# load file
+dlf <- read.delim("DownloadFestival.txt", header = TRUE)
+
+# log transform
+dlf$logday1 <- log(dlf$day1)
+dlf$logday1n1 <- log(dlf$day1 + 1) # natural log
+dlf
+
+# sqrt transform
+dlf$sqrtday1 <- sqrt(dlf$day1)
+dlf
+
+# reciprocal transform
+dlf$recday1 <- 1/(dlf$day1 + 1)
+
+# ifelse(a conditional arg, what happens if arg = TRUE, what happens if arg = FALSE)
+dlf$day1FewOutliers <- ifelse(dlf$day1 < 2, NA, dlf$day1)
+dlf
