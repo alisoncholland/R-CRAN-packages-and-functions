@@ -4,9 +4,71 @@
 setwd("C:/Users/wease/Desktop/Ali/AliCV/RGchallenge")
 getwd()
 
+
+# Data creation basics
+# --------------------
+
 # load data
 data1 <- read.csv("C:/Users/user/Desktop/ChallengeData1.csv", header = TRUE)
 data2 <- read.csv("C:/Users/user/Desktop/ChallengeData2.csv", header = TRUE)
 
 # merge data
 data <- merge(data1, data2, by = "userid")
+
+# create variables
+metallicaNames <- c("Lars", "James")
+metallicaAges <- c(47, 48)
+
+# create dataframe
+metallica <- data.frame(Name = metallicaNames, Age = metallicaAges)
+metallica
+
+## OR create matrix using list() and cbind()
+#metallica %>% 
+#  list(metallicaNames, metallicaAges) %>%
+#  cbind(metallicaNames, metallicaAges)
+
+# Refer to age variable
+metallica$Age
+
+# add new variable
+metallica$childAge <- c(12, 10)
+
+# list variables in dataframe
+names(metallica)
+
+# calculate dif between 2 variables
+metallica$fatherhoodAge <- metallica$Age - metallica$childAge
+
+# calculations involving dates (output dif in number of days where -ve means wife is younger)
+husband <- as.Date(c("1973-06-21", "1970-07-16"))
+wife <- as.Date(c("1984-11-12", "1973-08-02"))
+ageGap <- husband - wife
+ageGap
+
+# create coding variables/factors
+job <- c(1,1,1,1,1,2,2,2,2,2) # OR
+job <- c(rep(1, 5), rep(2, 5))
+
+job <- factor(job, levels = c(1:2), labels = c("Lecturer", "Student")) # Option 1: factor(variable, levels = c(x, y, ... z), labels = c("label 1", "label 2", ...)) 
+# OR 
+job <- gl(2, 5, labels = c("Lecturer", "Student")) # gl = generate (factor) levels, Option 2: gl(number of levels, cases in each level, total cases, labels = c("label 1", "label 2", ...))
+
+# check levels
+levels(job)
+
+# rename levels
+levels(job) <- c("Medical Lecturer", "Medical Student")
+
+# select parts of data frame
+metallicaAge <- metallica[, c("Age")] # newDataframe <- oldDataframe[rows, columns]
+metallicaAge
+
+# select parts of data frame with subset()
+metallicaName <- subset(metallica, select = c("Name")) # newDataframe <- subset(oldDataframe, cases to retain or conditions, select = c(list of variables))
+metallicaName
+
+# change dataframe into matrix (some functions don't work on dataframes)
+metallicaMatrix <- as.matrix(metallica)
+metallicaMatrix
+
