@@ -1,10 +1,22 @@
 # Copyright © 2017, Alison C. Holland, All rights reserved. 
 
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("car")
+install.packages("ggplot2")
+install.packages("pastecs")
+install.packages("psych")
+install.packages("Hmisc")
+install.packages("gridExtra")
 install.packages("forecast")
 
 # load packages
 library(dplyr)
-library(ggplot2)
 library(tidyr)
+library(car)
+library(ggplot2)
+library(pastecs)
+library(psych)
 library(Hmisc)
 library(gridExtra)
+library(forecast)
